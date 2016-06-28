@@ -151,4 +151,14 @@ void bake::updateAODevice( int num_samples, const float* hits, float* ao )
   updateAOKernel <<<block_count, block_size >>>(num_samples, hits, ao);
 }
 
+// Precondition: ao output initialized to 0 before first pass
+__host__
+void bake::updateAOHost( int num_samples, const float* hits, float* ao )
+{
+  for (int i = 0; i < num_samples; ++i) {
+    float distance = hits[i];
+    ao[i] += distance > 0.0 ? 1.0f : 0.0f;
+  }
+}
+
 
